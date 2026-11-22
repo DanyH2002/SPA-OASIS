@@ -20,10 +20,17 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'last_name',
+        'second_last_name',
         'email',
         'password',
+        'phone',
+        'birth_date',
+        'id_roles',
+        'profile_picture',
+        'gender',
+        'active'
     ];
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -45,5 +52,28 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'id_roles');
+    }
+
+    // Reservas de clientes/miembros
+    public function reservationsAsUser()
+    {
+        return $this->hasMany(Reservation::class, 'id_users');
+    }
+
+    // Reservas de terspeutas
+    public function reservationsAsTherapist()
+    {
+        return $this->hasMany(Reservation::class, 'id_therapists');
+    }
+
+    // Ordenes
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'id_users');
     }
 }
